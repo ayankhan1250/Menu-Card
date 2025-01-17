@@ -7,7 +7,8 @@ import 'favorite_page.dart';
 
 class MyHomePage extends StatefulWidget {
   final Map<String,bool> filters;
-  const MyHomePage({super.key, required this.filters,});
+  final Function toggleTheme;
+  const MyHomePage({super.key, required this.filters, required this.toggleTheme,});
   @override
 
   State<MyHomePage> createState() => _MyHomePageState();
@@ -15,6 +16,7 @@ class MyHomePage extends StatefulWidget {
 List<Meals> favorites = [];
 class _MyHomePageState extends State<MyHomePage> {
   var bottomIndex = 0;
+  bool isDark=false;
   final PageController pageController=PageController();
   List<String> title = ["Categories", "Your Favorites"];
   final List<Meals> favorites=[];
@@ -43,7 +45,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +54,17 @@ class _MyHomePageState extends State<MyHomePage> {
           title[bottomIndex],
           style: const TextStyle(fontWeight: FontWeight.w600,),
         ),
+        actions: [
+          IconButton(
+              onPressed: (){
+                setState(() {
+                  isDark=!isDark;
+                  widget.toggleTheme();
+                });
+              },
+              icon: isDark?Icon(Icons.light_mode):Icon(Icons.dark_mode)
+          )
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {

@@ -15,7 +15,12 @@ class _FilterScreenState extends State<FilterScreen> {
   static bool isLactoseFree = false;
   static bool isVegetarian = false;
   static bool isVegan = false;
-
+ThemeMode themeMode=ThemeMode.system;
+  void toggleTheme(){
+    setState(() {
+      themeMode=(themeMode==ThemeMode.dark)?ThemeMode.light:ThemeMode.dark;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +32,8 @@ class _FilterScreenState extends State<FilterScreen> {
               'lactoseFree': isLactoseFree,
               'vegetarian': isVegetarian,
               'vegan': isVegan,
-            },));
+            },
+              toggleTheme: toggleTheme,));
           },
           icon: Icon(Icons.arrow_back),
         ),
