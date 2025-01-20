@@ -14,5 +14,24 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+import 'package:get/get.dart';
+class SwitchController extends GetxController {
+RxBool isGlutenFree = false.obs;
+RxBool isLactoseFree = false.obs;
+RxBool isVegetarian = false.obs;
+RxBool isVegan = false.obs;
+setGluten(bool value){
+isGlutenFree.value=value;
+}
+setLactose(bool value){
+isLactoseFree.value=value;
+}
+setVegetarian(bool value){
+isVegetarian.value=value;
+}
+setVegan(bool value){
+isVegan.value=value;
+}
+}
 
 
