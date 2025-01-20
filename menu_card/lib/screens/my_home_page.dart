@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import '../get_x_controller/get_x_controller.dart';
 import '../model/model.dart';
 import '../my_widgets/my_widgets.dart';
 import 'category_page.dart';
@@ -15,10 +16,10 @@ class MyHomePage extends StatefulWidget {
 }
 List<Meals> favorites = [];
 class _MyHomePageState extends State<MyHomePage> {
+  ThemeController themeController=Get.put(ThemeController());
+  BottomBarController bottomBarController=Get.put(BottomBarController());
   var bottomIndex = 0;
-  bool isDark=false;
   final PageController pageController=PageController();
-  List<String> title = ["Categories", "Your Favorites"];
   final List<Meals> favorites=[];
   Map<String,bool> filter={};
   @override
@@ -47,35 +48,34 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   Widget build(BuildContext context) {
+    print('Built');
     return Scaffold(
       drawer: myDrawer(filters: filter),
       appBar: AppBar(
         title: Text(
-          title[bottomIndex],
+          bottomBarController.index.value == 0
+              ? 'Categories'
+              : 'Your Favorites',
           style: const TextStyle(fontWeight: FontWeight.w600,),
         ),
         actions: [
-          IconButton(
-              onPressed: (){
-                setState(() {
-                  isDark=!isDark;
-                  widget.toggleTheme();
-                });
-              },
-              icon: isDark?Icon(Icons.light_mode):Icon(Icons.dark_mode)
-          )
+         Obx(() =>  IconButton(
+             onPressed: (){
+               themeController.setDark();
+               widget.toggleTheme();
+             },
+             icon: themeController.isDark.value?Icon(Icons.light_mode):Icon(Icons.dark_mode)
+         ),)
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: Obx(() => BottomNavigationBar(
         onTap: (index) {
-          setState(() {
-            bottomIndex = index;
-            pageController.animateToPage(bottomIndex,
+          bottomBarController.setIndex(index);
+          pageController.animateToPage(bottomBarController.index.value,
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.bounceIn);
-          });
         },
-        currentIndex: bottomIndex,
+        currentIndex: bottomBarController.index.value,
         selectedItemColor: Colors.redAccent[100],
         unselectedItemColor: Colors.white,
         selectedFontSize: 15,
@@ -90,14 +90,13 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Favorites',
           ),
         ],
-      ),
+      ),),
       body: PageView(
         controller: pageController,
         onPageChanged: (index){
-          setState(() {
 
-            bottomIndex=index;
-          });
+            bottomBarController.index.value=index;
+
         },
         children: [
           CategoriesScreen(favoriteFunction: favoriteFunction,filters: filter),

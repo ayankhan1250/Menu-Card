@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:menu_card/screens/my_home_page.dart';
 import 'package:get/get.dart';
-import '../getX_controller/get_x_controller.dart';
+import '../get_x_controller/get_x_controller.dart';
 import '../my_widgets/my_widgets.dart';
 
 class FilterScreen extends StatefulWidget {
@@ -21,7 +21,6 @@ ThemeMode themeMode=ThemeMode.system;
   }
   @override
   Widget build(BuildContext context) {
-    print('Built');
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

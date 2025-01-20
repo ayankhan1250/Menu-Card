@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:menu_card/get_x_controller/get_x_controller.dart';
 import '../model/model.dart';
 import '../my_widgets/my_widgets.dart';
 import 'my_home_page.dart';
@@ -19,7 +21,7 @@ class MealDetailScreen extends StatefulWidget {
 }
 
 class _MealDetailScreenState extends State<MealDetailScreen> {
-  late bool isFavorite;
+  FavoriteController favoriteController=Get.put(FavoriteController());
   late Meals selectedMeal;
   @override
   void initState() {
@@ -27,7 +29,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
      selectedMeal = meals.firstWhere(
           (e) => e.uid == widget.meal.uid,
     );
-    isFavorite =favorites.contains(selectedMeal);
+    favoriteController.isFavorite.value =favorites.contains(selectedMeal);
   }
   @override
   Widget build(BuildContext context) {
@@ -41,10 +43,10 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
           ),
         ),
         actions: [
-          IconButton(onPressed: (){
-            setState(() {
-              isFavorite = !isFavorite;
-              if (isFavorite) {
+          Obx(() => IconButton(
+              onPressed: (){
+            favoriteController.setFavorite();
+              if (favoriteController.isFavorite.value) {
                 if (!favorites.contains(selectedMeal)) {
                   favorites.add(widget.meal);
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -55,24 +57,22 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                 }
               } else {
                 if (favorites.contains(widget.meal)) {
-                    favorites.remove(selectedMeal);
-                    ScaffoldMessenger.of(context).showSnackBar(
+                  favorites.remove(selectedMeal);
+                  ScaffoldMessenger.of(context).showSnackBar(
 
-                        mySnackBar(
-                          'Removed From Favorites',
-                        )
-                    );
+                      mySnackBar(
+                        'Removed From Favorites',
+                      )
+                  );
                 }
               }
-              widget.updatePage();
-            });
-
-            // setState(() {
-            //   isFavorite = !isFavorite;
-            //   widget.favoriteFunction(selectedMeal);
-            // });
           },
-              icon: isFavorite?Icon(Icons.favorite):Icon(Icons.favorite_border))
+
+            // onPressed: (){
+            // favoriteController.setFavorite();
+            // widget.favoriteFunction(selectedMeal);
+            // },
+              icon: favoriteController.isFavorite.value?Icon(Icons.favorite):Icon(Icons.favorite_border)),)
         ],
       ),
       body: SingleChildScrollView(
