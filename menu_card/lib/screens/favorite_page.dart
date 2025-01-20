@@ -30,7 +30,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 final meal = favorites[index];
                 return GestureDetector(
                   onTap: () {
-                    Get.to(MealDetailScreen(
+                    Get.to(()=>MealDetailScreen(
                         meal: meal,
                         updatePage: () {
                           setState(() {});

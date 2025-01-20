@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:menu_card/screens/my_home_page.dart';
 import 'package:get/get.dart';
+import '../getX_controller/get_x_controller.dart';
 import '../my_widgets/my_widgets.dart';
 
 class FilterScreen extends StatefulWidget {
@@ -11,10 +12,7 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  static bool isGlutenFree = false;
-  static bool isLactoseFree = false;
-  static bool isVegetarian = false;
-  static bool isVegan = false;
+  SwitchController switchController =Get.put(SwitchController());
 ThemeMode themeMode=ThemeMode.system;
   void toggleTheme(){
     setState(() {
@@ -23,15 +21,16 @@ ThemeMode themeMode=ThemeMode.system;
   }
   @override
   Widget build(BuildContext context) {
+    print('Built');
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.to(MyHomePage(filters: {
-              'glutenFree': isGlutenFree,
-              'lactoseFree': isLactoseFree,
-              'vegetarian': isVegetarian,
-              'vegan': isVegan,
+            Get.to(()=>MyHomePage(filters: {
+              'glutenFree': switchController.isGlutenFree.value,
+              'lactoseFree': switchController.isLactoseFree.value,
+              'vegetarian': switchController.isVegetarian.value,
+              'vegan': switchController.isVegan.value,
             },
               toggleTheme: toggleTheme,));
           },
@@ -41,46 +40,41 @@ ThemeMode themeMode=ThemeMode.system;
       ),
       body: Column(
         children: [
-          mySwitchTile(
-            'Gluten-free',
-            'Only include gluten-free meals.',
-            isGlutenFree,
-                (newValue) {
-              setState(() {
-                isGlutenFree = newValue;
-              });
-            },
-          ),
-          mySwitchTile(
+          Obx(() {
+            return SwitchListTile(
+              title: Text('Gluten-free'),
+              subtitle: Text('Only include gluten-free meals.'),
+              value: switchController.isGlutenFree.value,
+              onChanged: (newValue) {
+                switchController.setGluten(newValue);
+              },
+              activeColor: Colors.green,
+            );
+          },),
+          Obx(() => mySwitchTile(
             'Lactose-free',
             'Only include lactose-free meals.',
-            isLactoseFree,
+            switchController.isLactoseFree.value,
                 (newValue) {
-              setState(() {
-                isLactoseFree = newValue;
-              });
+              switchController.setLactose(newValue);
             },
-          ),
-          mySwitchTile(
+          ),),
+          Obx(() => mySwitchTile(
             'Vegetarian',
             'Only include vegetarian meals.',
-            isVegetarian,
+            switchController.isVegetarian.value,
                 (newValue) {
-              setState(() {
-                isVegetarian = newValue;
-              });
+             switchController.setVegetarian(newValue);
             },
-          ),
-          mySwitchTile(
-            'Vegan',
-            'Only include vegan meals.',
-            isVegan,
-                (newValue) {
-              setState(() {
-                isVegan = newValue;
-              });
-            },
-          ),
+          ),),
+         Obx(() =>  mySwitchTile(
+           'Vegan',
+           'Only include vegan meals.',
+           switchController.isVegan.value,
+               (newValue) {
+            switchController.setVegan(newValue);
+           },
+         ),),
         ],
       ),
     );

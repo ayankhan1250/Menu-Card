@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../model/model.dart';
 import 'meals_page.dart';
@@ -31,15 +32,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           final category = categories[index];
           return GestureDetector(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => MealsScreen(
-                    categoryName: category.name,
-                    filters: widget.filters,
-                    favoriteFunction: widget.favoriteFunction,
-                  ),
-                ),
-              );
+              Get.to(()=>MealsScreen(
+                categoryName: category.name,
+                filters: widget.filters,
+                favoriteFunction: widget.favoriteFunction,
+              ),);
             },
             child: Card(
               shape: RoundedRectangleBorder(

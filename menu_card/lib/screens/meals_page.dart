@@ -68,7 +68,7 @@ class _MealsScreenState extends State<MealsScreen> {
           final meal = categoryMeals[index];
           return GestureDetector(
             onTap: () {
-              Get.to(MealDetailScreen(
+              Get.to(()=>MealDetailScreen(
                 meal: meal,
                 favoriteFunction:widget.favoriteFunction,
               updatePage: (){},),);

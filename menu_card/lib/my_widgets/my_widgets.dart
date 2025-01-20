@@ -96,7 +96,7 @@ Widget myDrawer({required Map<String, bool> filters}){
         ),
         ListTile(
           onTap: (){
-            Get.to(FilterScreen(filters: filters));
+            Get.to(() =>FilterScreen(filters: filters));
           },
           leading: const Icon(Icons.filter_alt_outlined,color: Colors.white,),
           title:  Text('Filters'),
